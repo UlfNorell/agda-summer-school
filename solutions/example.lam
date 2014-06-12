@@ -1,0 +1,7 @@
+let twice : (nat → nat) → nat → nat
+          = λ (f : nat → nat) → λ (x : nat) → f (f x) in
+let plus2  : nat → nat = twice suc in
+let plus4  : nat → nat = twice plus2 in
+let plus8  : nat → nat = twice plus4 in
+let plus16 : nat → nat = twice plus8 in
+plus16 15
