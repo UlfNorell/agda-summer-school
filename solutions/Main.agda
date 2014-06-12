@@ -33,7 +33,7 @@ parseAndTypeCheck s =
   mapLeft scope-error (parseAndScopeCheck s) >>= λ e →
   TypeCheck.checkedTerm <$> typeCheck [] e
 
-main : IO ⊤
+main : IO Unit
 main = getArgs >>= λ
        { [ file ] →
            readFile file >>= λ s →
