@@ -1,7 +1,11 @@
 let twice : (nat → nat) → nat → nat
           = λ (f : nat → nat) → λ (x : nat) → f (f x) in
-let plus2  : nat → nat = twice suc in
-let plus4  : nat → nat = twice plus2 in
-let plus8  : nat → nat = twice plus4 in
-let plus16 : nat → nat = twice plus8 in
-plus16 15
+let times4 : (nat → nat) → nat → nat
+           = λ (f : nat → nat) → twice (twice f) in
+let times16 : (nat → nat) → nat → nat
+            = λ (f : nat → nat) → times4 (times4 f) in
+let times256 : (nat → nat) → nat → nat
+             = λ (f : nat → nat) → times16 (times16 f) in
+let times65536 : (nat → nat) → nat → nat
+               = λ (f : nat → nat) → times256 (times256 f) in
+times65536 suc 34464
