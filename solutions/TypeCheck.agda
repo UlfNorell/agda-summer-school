@@ -6,7 +6,7 @@ open import Term
 open import ScopeCheck hiding (Error; error; checkedTerm)
 open WellTyped
 open WellScoped renaming (Term to Expr) hiding (erase)
-open import ShowTerm
+open import Term.Show
 
 data TypeError : Set where
   scope-error : ScopeError → TypeError

@@ -1,8 +1,10 @@
 
+module Term.Parse where
+
 open import Prelude
 import Text.Parse as P
 
-open import LexTerm
+open import Term.Lex
 open import Term
 open Term.Unchecked
 open P Token

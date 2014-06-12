@@ -4,7 +4,7 @@ module SECD.Unchecked where
 open import Prelude
 
 open import Term
-open import ShowTerm
+open import Term.Show
 open Term.Unchecked
 
 data Value : Set

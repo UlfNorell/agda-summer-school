@@ -1,4 +1,6 @@
 
+module Term.Lex where
+
 open import Prelude
 open import Prelude.Equality.Unsafe
 open import Text.Lex

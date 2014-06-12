@@ -5,7 +5,7 @@ open import Prelude
 open import Data.List
 
 open import Term
-open import ShowTerm
+open import Term.Show
 open Term.WellTyped
 open import Sequence
 

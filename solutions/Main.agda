@@ -4,10 +4,10 @@ open import Data.Traversable
 open import Data.List
 
 open import Term
-open import ParseTerm
+open import Term.Parse
 open import ScopeCheck
 open import TypeCheck
-open import ShowTerm
+open import Term.Show
 
 import SECD.Unchecked
 import SECD.WellScoped

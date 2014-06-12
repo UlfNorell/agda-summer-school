@@ -1,4 +1,6 @@
 
+module Term.Show where
+
 open import Prelude
 
 open import Term
