@@ -7,7 +7,6 @@ open import Lists
 open import Term
 open import Term.Show
 open Term.WellTyped
-open import Sequence
 
 data Value : Type → Set
 
@@ -26,7 +25,7 @@ data Directive Γ : StackType → StackType → Set where
   apply : ∀ {a b Θ} → Directive Γ (a ⇒ b ∷ a ∷ Θ) (b ∷ Θ)
 
 Stack   = All Value
-Control = λ Γ → Seq (Directive Γ)
+Control = λ Γ → Path (Directive Γ)
 
 record Snapshot Δ a : Set where
   constructor snapshot
@@ -37,7 +36,7 @@ record Snapshot Δ a : Set where
     environment : Env Γ
     control     : Control Γ (Δ ++ Θ) [ a ]
 
-Dump = Seq (λ a b → Snapshot [ a ] b)
+Dump = Path (λ a b → Snapshot [ a ] b)
 
 record SECD a : Set where
   constructor secd

@@ -7,7 +7,6 @@ open import Lists
 open import Term
 open import Term.Show
 open Term.WellTyped
-open import Sequence
 
 StackType = List Type
 Control : Cxt → StackType → StackType → Set
@@ -19,7 +18,7 @@ data Instr Γ : StackType → StackType → Set where
   lit    : ∀ {Θ} → Nat → Instr Γ Θ (nat ∷ Θ)
   suc    : ∀ {Θ} → Instr Γ Θ (nat ⇒ nat ∷ Θ)
 
-Control Γ = Seq (Instr Γ)
+Control Γ = Path (Instr Γ)
 
 compile′ : ∀ {Γ a Θ Δ} → Term Γ a → Control Γ (a ∷ Θ) Δ → Control Γ Θ Δ
 compile′ (var x i)   c = access x i ∷ c
@@ -52,7 +51,7 @@ record Snapshot Δ a : Set where
     environment : Env Γ
     control     : Control Γ (Δ ++ Θ) [ a ]
 
-Dump = Seq (λ a b → Snapshot [ a ] b)
+Dump = Path (λ a b → Snapshot [ a ] b)
 
 record SECD a : Set where
   constructor secd

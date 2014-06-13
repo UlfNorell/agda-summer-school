@@ -24,3 +24,11 @@ lookup∈ (p ∷ ps) (suc i)     = lookup∈ ps i
 map∈ : ∀ {A B} (f : A → B) {x xs} → x ∈ xs → f x ∈ map f xs
 map∈ f (zero refl) = zero refl
 map∈ f (suc i)     = suc (map∈ f i)
+
+data Path {i e} {I : Set i} (E : I → I → Set e) : I → I → Set (i ⊔ e) where
+  []  : ∀ {i} → Path E i i
+  _∷_ : ∀ {i j k} → E i j → Path E j k → Path E i k
+
+_>+>_ : ∀ {i e} {I : Set i} {E : I → I → Set e} {i j k} → Path E i j → Path E j k → Path E i k
+[]       >+> ys = ys
+(x ∷ xs) >+> ys = x ∷ xs >+> ys

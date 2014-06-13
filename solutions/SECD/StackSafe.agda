@@ -7,7 +7,6 @@ open import Lists
 open import Term
 open import Term.Show
 open Term.WellScoped
-open import Sequence
 
 data Value : Set
 
@@ -26,7 +25,7 @@ data Directive Γ : Nat → Nat → Set where
   apply : ∀ {n} → Directive Γ (2 + n) (1 + n)
 
 Stack   = Vec Value
-Control = λ Γ → Seq (Directive Γ)
+Control = λ Γ → Path (Directive Γ)
 
 record Snapshot j : Set where
   constructor snapshot

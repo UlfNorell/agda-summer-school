@@ -5,7 +5,7 @@ open import Data.Traversable
 open import Term
 open import Term.Parse
 open import ScopeCheck
--- open import TypeCheck
+import TypeCheck
 open import TypeCheckRaw
 open import Term.Show
 open import Lists
