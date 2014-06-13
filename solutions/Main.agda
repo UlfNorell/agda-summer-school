@@ -1,13 +1,14 @@
 
 open import Prelude
 open import Data.Traversable
-open import Data.List
 
 open import Term
 open import Term.Parse
 open import ScopeCheck
-open import TypeCheck
+-- open import TypeCheck
+open import TypeCheckRaw
 open import Term.Show
+open import Lists
 
 import SECD.Unchecked
 import SECD.WellScoped
@@ -30,8 +31,8 @@ parseAndScopeCheck s = maybe (left parse-error) (λ e → ScopeCheck.checkedTerm
 
 parseAndTypeCheck : String → Either TypeError (Σ Type (Term []))
 parseAndTypeCheck s =
-  mapLeft scope-error (parseAndScopeCheck s) >>= λ e →
-  TypeCheck.checkedTerm <$> typeCheck [] e
+  flip (maybe (left parse-error)) (parseTerm s) $ λ e →
+  TypeCheckRaw.checkedTerm <$> typeCheck [] e
 
 main : IO Unit
 main = getArgs >>= λ
