@@ -37,19 +37,19 @@ error = left
 data TypeChecked Γ : Expr (map fst Γ) → Set where
   ok : ∀ a (v : Term Γ a) → TypeChecked Γ (erase v)
 
-data OkVar (Γ : Cxt) x : x ∈ map fst Γ → Set where
-  ok : ∀ a (i : (x , a) ∈ Γ) → OkVar Γ x (map∈ fst i)
+data CheckedVar (Γ : Cxt) x : x ∈ map fst Γ → Set where
+  ok : ∀ a (i : (x , a) ∈ Γ) → CheckedVar Γ x (map∈ fst i)
 
-lookupVarSuc : ∀ {y x Γ i} → OkVar Γ x i → OkVar (y ∷ Γ) x (suc i)
+lookupVarSuc : ∀ {y x Γ i} → CheckedVar Γ x i → CheckedVar (y ∷ Γ) x (suc i)
 lookupVarSuc (ok a i) = ok a (suc i)
 
-lookupVar : ∀ (Γ : Cxt) {x} (i : x ∈ map fst Γ) → OkVar Γ x i
+lookupVar : ∀ (Γ : Cxt) {x} (i : x ∈ map fst Γ) → CheckedVar Γ x i
 lookupVar [] ()
 lookupVar ((x , a) ∷ Γ) (zero refl) = ok a (zero refl)
 lookupVar (_       ∷ Γ) (suc i)     = lookupVarSuc (lookupVar Γ i)  -- can't do with: issue1187
 
-checkVar : ∀ {Γ x i} → OkVar Γ x i → TypeChecked Γ (var x i)
-checkVar (ok a i) = ok a (var _ i)
+checkedVar : ∀ {Γ x i} → CheckedVar Γ x i → TypeChecked Γ (var x i)
+checkedVar (ok a i) = ok a (var _ i)
 
 checkApp : ∀ {Γ} {e₁ e₂ : Expr (map fst Γ)} →
            TypeChecked Γ e₁ →
@@ -64,7 +64,7 @@ checkedLam : ∀ {Γ x a} {e : Expr (x ∷ map fst Γ)} →
 checkedLam (ok _ v) = ok _ (lam _ _ v)
 
 typeCheck : ∀ Γ (e : Expr (map fst Γ)) → Error (TypeChecked Γ e)
-typeCheck Γ (var x i)   = pure $ checkVar (lookupVar Γ i)
+typeCheck Γ (var x i)   = pure $ checkedVar (lookupVar Γ i)
 typeCheck Γ (lit n)     = pure $ ok _ (lit n)
 typeCheck Γ suc         = pure $ ok _ suc
 typeCheck Γ (app e₁ e₂) = typeCheck Γ e₁ >>= λ v₁ →
