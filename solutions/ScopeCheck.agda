@@ -1,6 +1,6 @@
 
 open import Prelude
-open import Data.List
+open import Lists
 
 open import Term
 open Unchecked renaming (Term to RawTerm)

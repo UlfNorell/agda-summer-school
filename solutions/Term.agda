@@ -1,6 +1,6 @@
 
 open import Prelude
-open import Data.List
+open import Lists
 
 infixr 7 _⇒_
 data Type : Set where
