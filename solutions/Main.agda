@@ -79,4 +79,4 @@ example =
               = λ (f : nat → nat) → times4 (times4 f) in
   let times256 : (nat → nat) → nat → nat
                = λ (f : nat → nat) → times16 (times16 f) in
-  times256 suc 244"
+  times4 (times256 suc) 976"
