@@ -72,12 +72,8 @@ runCompiled s =
   pure $ second (SECD.Compiled.run ∘ compile) r
 
 example =
- "let twice : (nat → nat) → nat → nat
-            = λ (f : nat → nat) → λ (x : nat) → f (f x) in
-  let times4 : (nat → nat) → nat → nat
-             = λ (f : nat → nat) → twice (twice f) in
-  let times16 : (nat → nat) → nat → nat
-              = λ (f : nat → nat) → times4 (times4 f) in
-  let times256 : (nat → nat) → nat → nat
-               = λ (f : nat → nat) → times16 (times16 f) in
+ "let twice    (f : nat → nat) (x : nat) : nat = f (f x)         in
+  let times4   (f : nat → nat) : nat → nat = twice (twice f)     in
+  let times16  (f : nat → nat) : nat → nat = times4 (times4 f)   in
+  let times256 (f : nat → nat) : nat → nat = times16 (times16 f) in
   times4 (times256 suc) 976"
