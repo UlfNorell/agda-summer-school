@@ -41,20 +41,25 @@ pType₁ = nat <$ pi! "nat" +++ paren pType
 apps : Term → List Term → Term
 apps f xs = foldl app f xs
 
-mkLet : String → Type → Term → Term → Term
-mkLet x a e₁ e₂ = app (lam x a e₂) e₁
+mkLet : Name → List (Name × Type) → Type → Term → Term → Term
+mkLet f args a e₁ e₂ =
+  app (lam f (foldr (_⇒_ ∘ snd) a args) e₂) (foldr (uncurry lam) e₁ args)
 
 mkVar : String → Term
 mkVar x = ifYes x == "suc" then suc else var x
 
 {-# NO_TERMINATION_CHECK #-}
 pLam pApp pAtom : P Term
+pArg : P (Name × Type)
+
 pLam =
   pApp
-  +++ lam <$ pλ <* p[ <*> pi <* p: <*> pType <* p]
+  +++ uncurry lam <$ pλ <*> pArg
           <*  p→ <*> pLam
-  +++ mkLet <$ pi! "let" <*> pi <* p: <*> pType <* p= <*> pLam
+  +++ mkLet <$ pi! "let" <*> pi <*> many pArg <* p: <*> pType <* p= <*> pLam
             <* pi! "in" <*> pLam
+
+pArg = _,_ <$ p[ <*> pi <* p: <*> pType <* p]
 
 pApp = apps <$> pAtom <*> many pAtom
 
