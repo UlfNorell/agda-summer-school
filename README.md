@@ -9,6 +9,7 @@
 - git
 
 ### Installing Agda
+- cabal update
 - cabal install Agda
 - agda-mode setup
 
