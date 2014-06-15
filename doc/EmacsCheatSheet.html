@@ -1,0 +1,100 @@
+<html>
+<head>
+  <title>Agda Emacs Mode - Cheat Sheet</title>
+  <style>
+    .shortcut {
+      font-family: Monaco;
+      font-weight: bold;
+      color: blue;
+    }
+    td.shortcut {
+      padding-right: 10px;
+      width: 20%;
+    }
+    ul {
+    }
+    td { vertical-align: top; }
+    table {
+      margin-left: 10px;
+      width: 90%;
+    }
+    body {
+      font-family: "Lucida Grande";
+    }
+    h3, h2 {
+      width: 90%;
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+<h2>Agda Emacs Mode - Cheat Sheet</h2>
+This document gives you an overview of the most commonly used commands in the
+Emacs mode for Agda.
+<h3>At the top-level</h3>
+<table>
+<tr><td class=shortcut>C-c C-l</td><td>Load (type check) the current buffer.</td></tr>
+<tr><td class=shortcut>C-c C-x C-c</td><td>Type check and compile the current buffer.</td></tr>
+<tr><td class=shortcut>C-c C-x C-r</td><td>Kill and restart Agda.</td></tr>
+<tr><td colspan=2><hr/></tr>
+<tr><td class=shortcut>C-c C-f</td><td>Move to the next goal.</td></tr>
+<tr><td class=shortcut>C-c C-b</td><td>Move to the previous goal.</td></tr>
+<tr><td class=shortcut>M-.</td><td><em>(Also middle mouse)</em> Jump to definition of identifier under cursor.</td></tr>
+<tr><td class=shortcut>M-*</td><td>Jump back.</td></tr>
+</table>
+<h3>In a goal</h3>
+<table>
+<tr><td class=shortcut>C-c C-,</td><td>Show goal type and context.</td></tr>
+<tr><td class=shortcut>C-c C-.</td><td>Show goal type, context and type of expression in hole.</td></tr>
+<tr><td class=shortcut>C-c C-h</td><td>
+  When hole contains an application of an undefined function, print (and copy to clipboard) the
+  type that the function should have.
+</td></tr>
+<tr><td colspan=2><hr/></tr>
+<tr><td class=shortcut>C-c C-SPC</td><td>Fill the hole with the given expression.</td></tr>
+<tr><td class=shortcut>C-c C-r</td><td><em>(In empty hole)</em> Refine the hole with "the
+  obvious thing".<br/>
+  - Lambda for function type.<br/>
+  - Constructor for single-constructor data type.<br/>
+  - Record expression for record type.</td></tr>
+<tr><td class=shortcut>C-c C-r</td><td><em>(In non-empty hole)</em>
+  Fill the hole with the given expression applied to an appropriate number of new holes.</td></tr>
+<tr><td class=shortcut>C-c C-a</td><td>Use proof search to fill the hole (uses case splits if hole contains <tt class=shortcut>-c</tt>).</td></tr>
+<tr><td class=shortcut>C-c C-c</td><td>Perform a case split on the given variable(s).</td></tr>
+</table>
+<h3>Either goal or top-level</h3>
+<table>
+<tr><td class=shortcut>C-c C-n</td><td>Evaluate an expression.</td></tr>
+<tr><td class=shortcut>C-c C-d</td><td>Infer the type of an expression.</td></tr>
+<tr><td class=shortcut>C-c C-w</td><td>Explain why an identifier is in scope.</td></tr>
+<tr><td class=shortcut>C-c C-o</td><td>Show what is exported from a module.</td></tr>
+</table>
+<h3>Modifiers</h3>
+Commands that print terms and types
+(<span class=shortcut>C-c C-,</span>,
+<span class=shortcut>C-c C-.</span>,
+<span class=shortcut>C-c C-n</span>, and
+<span class=shortcut>C-c C-d</span>) can be prefixed with
+<table>
+<tr><td class=shortcut>C-u</td><td>Print terms and types with no normalisation.</td></tr>
+<tr><td class=shortcut>C-u C-u</td><td>Print terms and types with full normalisation.</td></tr>
+</table>
+<h3>Working with Unicode</h3>
+<table>
+<tr><td class=shortcut>C-u C-x =</td><td>Explain how to type the character under (after) the cursor.</td></tr>
+<tr><td colspan=2><hr/></tr>
+<tr><td class=shortcut>\\</td><td>λ</td></tr>
+<tr><td class=shortcut>\to</td><td>→</td></tr>
+<tr><td class=shortcut>\all</td><td>∀</td></tr>
+<tr><td class=shortcut>\ex</td><td>∃</td></tr>
+<tr><td class=shortcut>\x</td><td>×</td></tr>
+<tr><td class=shortcut>\==</td><td>≡</td></tr>
+<tr><td class=shortcut>\bot</td><td>⊥</td></tr>
+<tr><td class=shortcut>\top</td><td>⊤</td></tr>
+<tr><td class=shortcut>\neg</td><td>¬</td></tr>
+<tr><td class=shortcut>\Gamma</td><td>Γ</td></tr>
+<tr><td class=shortcut>\Sigma</td><td>Σ</td></tr>
+<tr><td colspan=2><em>Most characters can be typed using their LaTeX names.</em></td></tr>
+</table>
+</body>
+</html>
