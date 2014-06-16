@@ -28,8 +28,12 @@ module WellScoped where
   open Unchecked hiding (Term)
 
   -- Exercise: Define the erasure from well-scoped to unchecked terms.
-  postulate
-    erase : ∀ {Γ} → Term Γ → Unchecked.Term
+  erase : ∀ {Γ} → Term Γ → Unchecked.Term
+  erase (var x _)   = var x
+  erase (lit n)     = lit n
+  erase suc         = suc
+  erase (app u v)   = app (erase u) (erase v)
+  erase (lam x a v) = lam x a (erase v)
 
 module WellTyped where
 
@@ -46,5 +50,9 @@ module WellTyped where
   open WellScoped hiding (Term; erase)
 
   -- Exercise: Define the erasure from well-typed to well-scoped terms.
-  postulate
-    erase : ∀ {Γ a} → Term Γ a → WellScoped.Term (map fst Γ)
+  erase : ∀ {Γ a} → Term Γ a → WellScoped.Term (map fst Γ)
+  erase (var x i)   = var x (map∈ fst i)
+  erase (app u v)   = app (erase u) (erase v)
+  erase (lam x a v) = lam x a (erase v)
+  erase (lit n)     = lit n
+  erase suc         = suc

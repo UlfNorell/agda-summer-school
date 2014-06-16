@@ -12,7 +12,7 @@ import SECD.Unchecked
 import SECD.Compiled
 
 open SECD.Unchecked  using (ShowValue)
-open SECD.Compiled   using (compile)
+open SECD.Compiled   using (compile; ShowControl; ShowInstr; ShowValue)
 
 open Unchecked  renaming (Term to Raw)
 open WellScoped renaming (Term to Expr)
@@ -26,8 +26,8 @@ main = getArgs >>= λ
            λ { (left err)      → putStrLn $ "ERROR\n" & show err
              ; (right (a , v)) → putStrLn $ "OK\nTerm: " & show v
                                            & "\nType: " & show a
-                                           -- & "\nCompiled: " & show (compile v)
-                                           -- & "\nValue: " & show (SECD.Compiled.run (compile v))
+                                           & "\nCompiled: " & show (compile v)
+                                           & "\nValue: " & show (SECD.Compiled.run v)
              }
        ; _ → getProgName >>= λ p → putStrLn ("Usage: " & p & " FILE")
        }

@@ -1,46 +1,43 @@
 
-module SECD.WellScoped where
+module SECD.StackSafe where
 
 open import Prelude
-open import Lists
 
 open import Term
 open import Term.Show
-open Term.WellScoped
+open import Term.Parse
+open Term.Unchecked
+open import Lists
 
 data Value : Set
-
-Cxt = List Name
-
-Env : Cxt → Set
-Env Γ = All (const Value) Γ
+Env = List (Name × Value)
 
 data Value where
   lit     : Nat → Value
   suc     : Value
-  closure : ∀ {Γ} (x : Name) → Env Γ → Term (x ∷ Γ) → Value
+  closure : Name → Env → Term → Value
 
-data Directive Γ : Set where
-  term  : Term Γ → Directive Γ
-  apply : Directive Γ
+data Directive : Nat → Nat → Set where
+  term  : ∀ {n} → Term → Directive n (1 + n)
+  apply : ∀ {n} → Directive (2 + n) (1 + n)
 
-Stack   = List Value
-Control = λ Γ → List (Directive Γ)
+Stack   = Vec Value
+Control = Path Directive
 
-record Snapshot : Set where
+record Snapshot j : Set where
   constructor snapshot
   field
-    stack       : Stack
-    {Γ}         : Cxt
-    environment : Env Γ
-    control     : Control Γ
+    {n}         : Nat
+    stack       : Stack n
+    environment : Env
+    control     : Control (j + n) 1
 
-Dump = List Snapshot
+Dump = List (Snapshot 1)
 
 record SECD : Set where
   constructor secd
   field
-    current : Snapshot
+    current : Snapshot 0
     dump    : Dump
 
   open Snapshot current public
@@ -63,8 +60,10 @@ step (v ∷ [] ∣ e′ ∣ [] ∣ (snapshot s e c) ∷ d) =
 step (s ∣ e ∣ term (lit n) ∷ c ∣ d) =
   next (lit n ∷ s ∣ e ∣ c ∣ d)
 
-step (s ∣ e ∣ term (var x i) ∷ c ∣ d) =
-  next (lookup∈ e i ∷ s ∣ e ∣ c ∣ d)
+step (s ∣ e ∣ term (var x) ∷ c ∣ d) =
+  case lookup e x of
+  λ { nothing  → error ("variable out of scope: " & x)
+    ; (just v) → next (v ∷ s ∣ e ∣ c ∣ d) }
 
 step (s ∣ e ∣ term suc ∷ c ∣ d) =
   next (suc ∷ s ∣ e ∣ c ∣ d)
@@ -79,12 +78,8 @@ step (suc ∷ lit n ∷ s ∣ e ∣ apply ∷ c ∣ d) =
   next (lit (suc n) ∷ s ∣ e ∣ c ∣ d)
 
 step (closure x e′ t ∷ v ∷ s ∣ e ∣ apply ∷ c ∣ d) =
-  next ([] ∣ v ∷ e′ ∣ term t ∷ [] ∣ (snapshot s e c) ∷ d)
+  next ([] ∣ (x , v) ∷ e′ ∣ term t ∷ [] ∣ (snapshot s e c) ∷ d)
 
-step ([]                      ∣ _ ∣ []        ∣ _) = error "empty stack on return"
-step (_ ∷ _ ∷ _               ∣ _ ∣ []        ∣ _) = error "more than one stack element on return"
-step ([]                      ∣ _ ∣ apply ∷ _ ∣ _) = error "apply on empty stack"
-step (_ ∷ []                  ∣ _ ∣ apply ∷ _ ∣ _) = error "apply on singleton stack"
 step (lit _ ∷ _ ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply literal"
 step (suc ∷ suc ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to suc"
 step (suc ∷ closure _ _ _ ∷ _ ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to closure"
@@ -96,14 +91,14 @@ run′ s with step s
 ... | done v  = right v
 ... | error e = left e 
 
-run : Term [] → Either String Value
+run : Term → Either String Value
 run t = run′ ([] ∣ [] ∣ term t ∷ [] ∣ [])
 
 -- Show instance for values --
 
 private
   showValue : Nat → Value → ShowS
-  showEnv   : ∀ {Γ} → Env Γ → ShowS
+  showEnv   : Env → ShowS
 
   showValue p (lit n)         = shows n
   showValue p suc             = showString "suc"
@@ -112,10 +107,10 @@ private
   showBinding : Name × Value → ShowS
   showBinding (x , v) = showString x ∘ showString " = " ∘ showValue 0 v
 
-  showEnv′ : ∀ {Γ} → Env Γ → ShowS
-  showEnv′ []       = showString ""
-  showEnv′ {Γ = x ∷ []} (v ∷ []) = showBinding (x , v)
-  showEnv′ {Γ = x ∷ Γ } (v ∷ e)  = showBinding (x , v) ∘ showString ", " ∘ showEnv′ e
+  showEnv′ : Env → ShowS
+  showEnv′ []      = showString ""
+  showEnv′ [ b ]   = showBinding b
+  showEnv′ (b ∷ e) = showBinding b ∘ showString ", " ∘ showEnv′ e
 
   showEnv e = showString "[" ∘ showEnv′ e ∘ showString "]"
 

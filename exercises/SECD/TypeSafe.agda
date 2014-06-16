@@ -1,60 +1,60 @@
 
-module SECD.StackSafe where
+module SECD.TypeSafe where
 
 open import Prelude
-open import Lists
 
 open import Term
 open import Term.Show
-open Term.WellScoped
+open import Term.Parse
+open WellTyped
+open import Lists
 
-data Value : Set
-
-Cxt = List Name
-
+data Value : Type → Set
 Env : Cxt → Set
-Env Γ = All (const Value) Γ
+Env = All (Value ∘ snd)
 
 data Value where
-  lit     : Nat → Value
-  suc     : Value
-  closure : ∀ {Γ} (x : Name) → Env Γ → Term (x ∷ Γ) → Value
+  lit     : Nat → Value nat
+  suc     : Value (nat ⇒ nat)
+  closure : ∀ {Γ a b} (x : Name) → Env Γ → Term ((x , a) ∷ Γ) b → Value (a ⇒ b)
 
-data Directive Γ : Nat → Nat → Set where
-  term  : ∀ {n} → Term Γ → Directive Γ n (1 + n)
-  apply : ∀ {n} → Directive Γ (2 + n) (1 + n)
+StackType = List Type
 
-Stack   = Vec Value
-Control = λ Γ → Path (Directive Γ)
+data Directive Γ : StackType → StackType → Set where
+  term  : ∀ {Δ a} → Term Γ a → Directive Γ Δ (a ∷ Δ)
+  apply : ∀ {Δ a b} → Directive Γ (a ⇒ b ∷ a ∷ Δ) (b ∷ Δ)
 
-record Snapshot j : Set where
+Stack   = All Value
+Control = Path ∘ Directive
+
+record Snapshot Θ a : Set where
   constructor snapshot
   field
-    {n}         : Nat
-    stack       : Stack n
+    {Δ}         : StackType
+    stack       : Stack Δ
     {Γ}         : Cxt
     environment : Env Γ
-    control     : Control Γ (j + n) 1
+    control     : Control Γ (Θ ++ Δ) [ a ]
 
-Dump = List (Snapshot 1)
+Dump = Path (λ a b → Snapshot [ a ] b)
 
-record SECD : Set where
+record SECD a : Set where
   constructor secd
   field
-    current : Snapshot 0
-    dump    : Dump
+    {b}     : Type
+    current : Snapshot [] b
+    dump    : Dump b a
 
   open Snapshot current public
 
 infix 1 _∣_∣_∣_
 pattern _∣_∣_∣_ s e c d = secd (snapshot s e c) d
 
-data StepResult : Set where
-  done  : Value → StepResult
-  next  : SECD → StepResult
-  error : String → StepResult
+data StepResult a : Set where
+  done  : Value a → StepResult a
+  next  : SECD a → StepResult a
 
-step : SECD → StepResult
+step : ∀ {a} → SECD a → StepResult a
 
 step (v ∷ [] ∣ _ ∣ [] ∣ []) = done v
 
@@ -82,39 +82,34 @@ step (suc ∷ lit n ∷ s ∣ e ∣ apply ∷ c ∣ d) =
 step (closure x e′ t ∷ v ∷ s ∣ e ∣ apply ∷ c ∣ d) =
   next ([] ∣ v ∷ e′ ∣ term t ∷ [] ∣ (snapshot s e c) ∷ d)
 
-step (lit _ ∷ _ ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply literal"
-step (suc ∷ suc ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to suc"
-step (suc ∷ closure _ _ _ ∷ _ ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to closure"
-
 {-# NO_TERMINATION_CHECK #-}
-run′ : SECD → Either String Value
+run′ : ∀ {a} → SECD a → Value a
 run′ s with step s
 ... | next s′ = run′ s′
-... | done v  = right v
-... | error e = left e 
+... | done v  = v
 
-run : Term [] → Either String Value
+run : ∀ {a} → Term [] a → Value a
 run t = run′ ([] ∣ [] ∣ term t ∷ [] ∣ [])
 
 -- Show instance for values --
 
 private
-  showValue : Nat → Value → ShowS
+  showValue : ∀ {a} → Nat → Value a → ShowS
   showEnv   : ∀ {Γ} → Env Γ → ShowS
 
   showValue p (lit n)         = shows n
   showValue p suc             = showString "suc"
   showValue p (closure x e v) = showParen (p > 0) $ showEnv e ∘ showString (" λ " & x & " → ") ∘ shows v
 
-  showBinding : Name × Value → ShowS
+  showBinding : ∀ {a} → Name × Value a → ShowS
   showBinding (x , v) = showString x ∘ showString " = " ∘ showValue 0 v
 
   showEnv′ : ∀ {Γ} → Env Γ → ShowS
-  showEnv′ []       = showString ""
-  showEnv′ {Γ = x ∷ []} (v ∷ []) = showBinding (x , v)
-  showEnv′ {Γ = x ∷ Γ } (v ∷ e)  = showBinding (x , v) ∘ showString ", " ∘ showEnv′ e
+  showEnv′ []      = showString ""
+  showEnv′ {Γ = (x , _) ∷ []} (v ∷ []) = showBinding (x , v)
+  showEnv′ {Γ = (x , _) ∷ Γ } (v ∷ e)  = showBinding (x , v) ∘ showString ", " ∘ showEnv′ e
 
   showEnv e = showString "[" ∘ showEnv′ e ∘ showString "]"
 
-ShowValue : Show Value
+ShowValue : ∀ {a} → Show (Value a)
 ShowValue = record { showsPrec = showValue }
