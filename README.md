@@ -30,10 +30,11 @@
 
 ### Exercises
 
-#### References
+#### Resources
 
 - `doc/AgdaCheatSheet.agda` contains a number of small examples showing some of the features of Agda.
 - `doc/EmacsCheatSheet.html` lists the most commonly used Emacs mode commands.
+- Browse the library. Use `M-.` or `middle mouse` to jump to the definitions of library functions.
 
 #### Warm-up exercises
 
