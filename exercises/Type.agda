@@ -4,7 +4,7 @@ open import Prelude
 infixr 7 _⇒_
 data Type : Set where
   nat : Type
-  _⇒_ : Type → Type → Type
+  _⇒_ : (a b : Type) → Type
 
 arrow-inj-dom : ∀ {a b a₁ b₁} → a ⇒ a₁ ≡ b ⇒ b₁ → a ≡ b
 arrow-inj-dom refl = refl
