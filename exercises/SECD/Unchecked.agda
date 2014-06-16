@@ -1,4 +1,5 @@
-
+-- An implementation of Landin's SECD machine. Adapted from
+-- Danvy 2003 (A Rational Deconstruction of Landin's SECD Machine).
 module SECD.Unchecked where
 
 open import Prelude

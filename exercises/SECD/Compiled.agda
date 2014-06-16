@@ -1,4 +1,6 @@
-
+-- An instruction set and compiler for the SECD machine.
+-- Adapted from Ager et al. 2003 (From Interpreter to
+-- Compiler and Virtual Machine: a Functional Derivation).
 module SECD.Compiled where
 
 open import Prelude
