@@ -23,24 +23,30 @@
 
 #### Check that it works
 - Open agda-summer-school exercises/Main.agda in Emacs
-- Hit C-c C-l to type check
-- Hit C-c C-x C-x to compile
+- Hit `C-c C-l` to type check
+- Hit `C-c C-x C-c` to compile
 - You should now have an executable Main in exercises/
-- Run ./Main example.lam. This should tell you that you haven't implemented TypeCheck.typeCheck.
+- Run `./Main example.lam`. This should tell you that you haven't implemented `TypeCheck.typeCheck`.
 
 ### Exercises
 
+#### References
+
+- `doc/AgdaCheatSheet.agda` contains a number of small examples showing some of the features of Agda.
+- `doc/EmacsCheatSheet.html` lists the most commonly used Emacs mode commands.
+
 #### Warm-up exercises
 
-- exercises/Lists.agda
+- `exercises/Lists.agda`
 
 #### Lambda terms
 
-- exercises/Term.agda
-- exercises/TypeCheck.agda
+- `exercises/Term.agda`
+- `exercises/Term/Eval.agda`
+- `exercises/TypeCheck.agda`
 
 #### SECD machine
 
-- exercises/SECD/StackSafe.agda
-- exercises/SECD/WellTyped.agda
-- exercises/SECD/Compiled.agda
+- `exercises/SECD/StackSafe.agda`
+- `exercises/SECD/WellTyped.agda`
+- `exercises/SECD/Compiled.agda`
