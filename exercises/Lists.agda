@@ -14,10 +14,20 @@ _∈_ : ∀ {A : Set} → A → List A → Set
 x ∈ xs = Any (_≡_ x) xs
 
 -- Exercise: Implement the functions below --
+
 postulate
- lookupAny : ∀ {A} {P Q : A → Set} {xs} → All P xs → Any Q xs → Σ A (λ x → P x × Q x)
- lookup∈ : ∀ {A : Set} {P : A → Set} {xs x} → All P xs → x ∈ xs → P x
- map∈ : ∀ {A B} (f : A → B) {x xs} → x ∈ xs → f x ∈ map f xs
+  elem : ∀ {A : Set} {{EqA : Eq A}} (x : A) (xs : List A) → Maybe (x ∈ xs)
+
+  lookup∈ : ∀ {A : Set} {P : A → Set} {xs x} → All P xs → x ∈ xs → P x
+
+  forgetAll : ∀ {A} {P : A → Set} {xs} → All P xs → List (Σ A P)
+
+  allOrAny : ∀ {A} {P : A → Set} → (∀ x → Dec (P x)) → (xs : List A) → Either (Any (¬_ ∘ P) xs) (All P xs)
+
+  lookupAny : ∀ {A} {P Q : A → Set} {xs} → All P xs → Any Q xs → Σ A (λ x → P x × Q x)
+
+  map∈ : ∀ {A B} (f : A → B) {x xs} → x ∈ xs → f x ∈ map f xs
+
 
 -- Exercise: Define a data type Path, representing a sequence of zero or more edges
 -- E i j where the second index of one edge matches the first index of the next. For
