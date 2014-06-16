@@ -134,6 +134,26 @@ module TermsAndDeclarations where
       ; (suc n) → 100 * (n + 1)
       }
 
+  -- For mutually recursive functions type signatures need to appear
+  -- before use.
+  even : Nat → Bool
+  odd  : Nat → Bool
+  odd zero    = false
+  odd (suc n) = even n
+
+  even zero    = true
+  even (suc n) = odd n
+
+  -- You can disable the termination checker.
+  -- Unchecked functions will not reduce in types (but can still
+  -- be evaluated with C-c C-n).
+  {-# NO_TERMINATION_CHECK #-}
+  collatz : Nat → Nat
+  collatz 0 = 1
+  collatz 1 = 1
+  collatz n = if even n then collatz (n div 2)
+                        else collatz (3 * n + 1)
+
 module With where
 
   open DataTypes
