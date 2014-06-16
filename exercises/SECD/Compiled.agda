@@ -1,4 +1,6 @@
-
+-- An instruction set and compiler for the SECD machine.
+-- Adapted from Ager et al. 2003 (From Interpreter to
+-- Compiler and Virtual Machine: a Functional Derivation).
 module SECD.Compiled where
 
 open import Prelude
@@ -31,5 +33,5 @@ compile v = compile′ v []
 
 -- Exercise:
 --   Make the instruction set above type safe and modify (a copy of) the
---   WellTyped SECD machine to use this representation of the control
+--   TypeSafe SECD machine to use this representation of the control
 --   component.
