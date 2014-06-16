@@ -18,16 +18,17 @@ open Unchecked  renaming (Term to Raw)
 open WellScoped renaming (Term to Expr)
 open WellTyped
 
+ShowRes : Show (Either String SECD.Unchecked.Value)
+ShowRes = ShowEither
+
 main : IO Unit
 main = getArgs >>= λ
        { [ file ] →
            readFile file >>= λ s →
-           case parseAndTypeCheck s of
-           λ { (left err)      → putStrLn $ "ERROR\n" & show err
-             ; (right (a , v)) → putStrLn $ "OK\nTerm: " & show v
-                                           & "\nType: " & show a
-                                           -- & "\nCompiled: " & show (compile v)
-                                           -- & "\nValue: " & show (SECD.Compiled.run (compile v))
+           case parseTerm s of
+           λ { nothing  → putStrLn "Parse error!"
+             ; (just v) → putStrLn $ "Parsed: " & show v
+                                    & "\nValue: " & show (SECD.Unchecked.run v)
              }
        ; _ → getProgName >>= λ p → putStrLn ("Usage: " & p & " FILE")
        }

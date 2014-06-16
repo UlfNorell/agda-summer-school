@@ -26,7 +26,8 @@
 - Hit `C-c C-l` to type check
 - Hit `C-c C-x C-c` to compile
 - You should now have an executable Main in exercises/
-- Run `./Main example.lam`. This should tell you that you haven't implemented `TypeCheck.typeCheck`.
+- Run `./Main example.lam`. This should print a desugared lambda term and the
+  result of running it through the SECD machine.
 
 ### Exercises
 
