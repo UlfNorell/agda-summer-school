@@ -16,6 +16,8 @@
 #### Getting the libraries
 - git clone https://github.com/UlfNorell/agda-prelude
 - git clone https://github.com/UlfNorell/agda-summer-school
+- cd agda-prelude/agda-ffi
+- cabal install
 
 #### Set up Emacs paths
 - M-x customize-group agda2
