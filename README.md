@@ -22,7 +22,7 @@
 #### Set up Emacs paths
 - M-x agda2-mode
 - M-x customize-group agda2
-- Add path to agda-prelude/src to Include Dirs (make sure to not remove "." from the list)
+- Add path to agda-prelude/src to Include Dirs (make sure to **NOT** remove "." from the list)
 
 #### Check that it works
 - Open agda-summer-school exercises/Main.agda in Emacs
