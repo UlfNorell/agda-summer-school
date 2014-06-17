@@ -20,6 +20,7 @@
 - cabal install
 
 #### Set up Emacs paths
+- M-x agda2-mode
 - M-x customize-group agda2
 - Add path to agda-prelude/src to Include Dirs
 
