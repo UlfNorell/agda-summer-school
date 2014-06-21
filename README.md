@@ -25,11 +25,11 @@
 - Add path to agda-prelude/src to Include Dirs (make sure to **NOT** remove "." from the list)
 
 #### Check that it works
-- Open agda-summer-school exercises/Main.agda in Emacs
+- Open agda-summer-school/exercises/Lambda.agda in Emacs
 - Hit `C-c C-l` to type check
 - Hit `C-c C-x C-c` to compile
-- You should now have an executable Main in exercises/
-- Run `./Main example.lam`. This should print a desugared lambda term and the
+- You should now have an executable Lambda in exercises/
+- Run `./Lambda example.lam`. This should print a desugared lambda term and the
   result of running it through the SECD machine.
 
 ### Exercises
