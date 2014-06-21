@@ -23,7 +23,7 @@ lines = lines′ ∘ unpackString
 --   Compute and print line numbers (represented by _∈_ or Any)
 --   Might be useful to implement a variant of filterMaybe:
 --     filterMaybeIx : {A : Set} {P : A → Set} → (∀ x → Maybe (P x)) →
---                     (xs : List A) → List (Σ A (λ x → x ∈ xs × P x)
+--                     (xs : List A) → List (Σ A (λ x → x ∈ xs × P x))
 
 -- Bonus exercise: More interesting matching
 --   data Inside {A : Set} (xs ys : List A) : Set where
