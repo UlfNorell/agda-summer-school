@@ -49,26 +49,20 @@ all₃ p (x ∷ xs) = allCons (p x) (all₃ p xs)
 
 -- Exercise: Implement the functions below --
 
--- Tip: Agda won't allow you to import a module with remaining holes.
---      If you want to use an unfinished function from a different module
---      you can replace it by a postulate:
---        postulate forget∈ : ∀ {A} {x : A} {xs} → x ∈ xs → Nat
---      and comment out the unfinished definition.
+postulate forget∈ : ∀ {A} {x : A} {xs} → x ∈ xs → Nat
+-- forget∈ i = {!!}
 
-forget∈ : ∀ {A} {x : A} {xs} → x ∈ xs → Nat
-forget∈ i = {!!}
+postulate find : ∀ {A : Set} {{EqA : Eq A}} (x : A) (xs : List A) → Maybe (x ∈ xs)
+-- find x xs = {!!}
 
-find : ∀ {A : Set} {{EqA : Eq A}} (x : A) (xs : List A) → Maybe (x ∈ xs)
-find x xs = {!!}
+postulate lookup∈ : ∀ {A : Set} {P : A → Set} {xs x} → All P xs → x ∈ xs → P x
+-- lookup∈ xs i = {!!}
 
-lookup∈ : ∀ {A : Set} {P : A → Set} {xs x} → All P xs → x ∈ xs → P x
-lookup∈ xs i = {!!}
+postulate forgetAll : ∀ {A} {P : A → Set} {xs} → All P xs → List (Σ A P)
+-- forgetAll ps = {!!}
 
-forgetAll : ∀ {A} {P : A → Set} {xs} → All P xs → List (Σ A P)
-forgetAll ps = {!!}
-
-filterMaybe : {A : Set} {P : A → Set} → (∀ x → Maybe (P x)) → List A → List (Σ A P)
-filterMaybe p xs = {!!}
+postulate filterMaybe : {A : Set} {P : A → Set} → (∀ x → Maybe (P x)) → List A → List (Σ A P)
+-- filterMaybe p xs = {!!}
 
 --- Path ------------------------------------------------------------------
 
@@ -79,16 +73,16 @@ data Path {I : Set} (E : I → I → Set) : I → I → Set where
   _∷_ : ∀ {i j k} → E i j → Path E j k → Path E i k
 
 -- Exercise: Solve the following maze.
-maze : {E : Nat → Nat → Set} →
-       (∀ {n} → E n (2 * n + 1)) →
-       (∀ {n} → E n (n div 3)) →
-       Path E 9 10
-maze up dn = {!!}
+postulate maze : {E : Nat → Nat → Set} →
+                 (∀ {n} → E n (2 * n + 1)) →
+                 (∀ {n} → E n (n div 3)) →
+                 Path E 9 10
+-- maze up dn = {!!}
 
 -- Exercise: Implement map and join.
-mapPath : ∀ {I} {E₁ E₂ : I → I → Set} {f : I → I} (g : ∀ {i j} → E₁ i j → E₂ (f i) (f j)) →
-      ∀ {i j} → Path E₁ i j → Path E₂ (f i) (f j)
-mapPath g xs = {!!}
+postulate mapPath : ∀ {I} {E₁ E₂ : I → I → Set} {f : I → I} (g : ∀ {i j} → E₁ i j → E₂ (f i) (f j)) →
+                    ∀ {i j} → Path E₁ i j → Path E₂ (f i) (f j)
+-- mapPath g xs = {!!}
 
-joinPath : ∀ {I} {E : I → I → Set} {i j k} → Path E i j → Path E j k → Path E i k
-joinPath xs ys = {!!}
+postulate joinPath : ∀ {I} {E : I → I → Set} {i j k} → Path E i j → Path E j k → Path E i k
+-- joinPath xs ys = {!!}
