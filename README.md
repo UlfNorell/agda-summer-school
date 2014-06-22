@@ -36,6 +36,9 @@
 
 #### Resources
 
+- [Agda Wiki](http://wiki.portal.chalmers.se/agda/pmwiki.php)
+- [Mailing list](https://lists.chalmers.se/mailman/listinfo/agda)
+- [IRC channel #agda on freenode](http://webchat.freenode.net)
 - `doc/AgdaCheatSheet.agda` contains a number of small examples showing some of the features of Agda.
 - `doc/EmacsCheatSheet.html` lists the most commonly used Emacs mode commands.
 - Browse the library. Use `M-.` or `middle mouse` to jump to the definitions of library functions.
