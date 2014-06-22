@@ -35,7 +35,7 @@ paren p = p[ *> p <* p]
 {-# NO_TERMINATION_CHECK #-}
 pType pType₁ : P Type
 
-pType  = pType₁ +++ _⇒_ <$> pType₁ <* p→ <*> pType
+pType  = pType₁ +++ _=>_ <$> pType₁ <* p→ <*> pType
 pType₁ = nat <$ pi! "nat" +++ paren pType
 
 apps : Term → List Term → Term
@@ -43,7 +43,7 @@ apps f xs = foldl app f xs
 
 mkLet : Name → List (Name × Type) → Type → Term → Term → Term
 mkLet f args a e₁ e₂ =
-  app (lam f (foldr (_⇒_ ∘ snd) a args) e₂) (foldr (uncurry lam) e₁ args)
+  app (lam f (foldr (_=>_ ∘ snd) a args) e₂) (foldr (uncurry lam) e₁ args)
 
 mkVar : String → Term
 mkVar x = ifYes x == "suc" then suc else var x

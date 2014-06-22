@@ -18,27 +18,25 @@ open Unchecked  renaming (Term to Raw)
 open WellScoped renaming (Term to Expr)
 open WellTyped
 
+-- Show instance for printing result. Agda only finds ground
+-- instances so we need to name this explicitly.
 ShowRes : Show (Either String SECD.Unchecked.Value)
 ShowRes = ShowEither
 
 main : IO Unit
-main = getArgs >>= λ
-       { [ file ] →
-           readFile file >>= λ s →
-           case parseTerm s of
-           λ { nothing  → putStrLn "Parse error!"
-             ; (just v) → putStrLn $ "Parsed: " & show v
-                                    & "\nValue: " & show (SECD.Unchecked.run v)
-             }
-       ; _ → getProgName >>= λ p → putStrLn ("Usage: " & p & " FILE")
-       }
+main = getArgs >>=
+       λ { [ file ] →
+             readFile file >>= λ s →
+             case parseTerm s of
+             λ { nothing  → putStrLn "Parse error!"
+               ; (just v) → putStrLn $ "Parsed: " & show v
+                                     & "\nValue: " & show (SECD.Unchecked.run v)
+               }
+         ; _ → getProgName >>= λ p → putStrLn ("Usage: " & p & " FILE")
+         }
 
-Show₁ : Show (Σ Type (Term []))
-Show₁ = ShowSigma {{ShowB = ShowTerm}}
-
-Show₂ : Show (Either TypeError (Σ Type (Term [])))
-Show₂ = ShowEither
-
+-- For running from emacs.
+-- For instance: C-c C-n runUnchecked "(λ (n : nat) → suc n) 5"
 runUnchecked : String → Either String SECD.Unchecked.Value
 runUnchecked s =
   case parseTerm s of
