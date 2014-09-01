@@ -13,8 +13,9 @@ private
   showType p nat      = showString "nat"
   showType p (a => b) = showParen (p > 7) $ showType 8 a ∘ showString " → " ∘ showType 7 b
 
-ShowType : Show Type
-ShowType = record { showsPrec = showType }
+instance
+  ShowType : Show Type
+  ShowType = record { showsPrec = showType }
 
 private
   showRaw : Nat → Raw → ShowS
@@ -25,11 +26,12 @@ private
   showRaw p (lam x a e) = showParen (p > 0) $ showString ("λ (" & x & " : ")
                                             ∘ shows a ∘ showString ") → " ∘ showRaw 0 e
 
-ShowRaw : Show Raw
-ShowRaw = record { showsPrec = showRaw }
+instance
+  ShowRaw : Show Raw
+  ShowRaw = record { showsPrec = showRaw }
 
-ShowExpr : ∀ {Γ} → Show (Expr Γ)
-ShowExpr = ShowBy forgetScope
+  ShowExpr : ∀ {Γ} → Show (Expr Γ)
+  ShowExpr = ShowBy forgetScope
 
 ShowTerm : ∀ {Γ a} → Show (Term Γ a)
 ShowTerm = ShowBy forgetTypes

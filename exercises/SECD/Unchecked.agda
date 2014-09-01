@@ -116,5 +116,6 @@ private
 
   showEnv e = showString "[" ∘ showEnv′ e ∘ showString "]"
 
-ShowValue : Show Value
-ShowValue = record { showsPrec = showValue }
+instance
+  ShowValue : Show Value
+  ShowValue = record { showsPrec = showValue }

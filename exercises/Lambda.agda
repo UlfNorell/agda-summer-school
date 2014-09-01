@@ -18,11 +18,6 @@ open Unchecked  renaming (Term to Raw)
 open WellScoped renaming (Term to Expr)
 open WellTyped
 
--- Show instance for printing result. Agda only finds ground
--- instances so we need to name this explicitly.
-ShowRes : Show (Either String SECD.Unchecked.Value)
-ShowRes = ShowEither
-
 main : IO Unit
 main = getArgs >>=
        λ { [ file ] →
