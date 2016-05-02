@@ -32,9 +32,8 @@ private
   eqTok (tn m) (tn  n) | no neq   = no λ eq → neq (tn-inj eq)
   eqTok _ _ = no unsafeNotEqual
 
-instance
-  EqToken : Eq Token
-  EqToken = record { _==_ = eqTok }
+EqToken : Eq Token
+EqToken = record { _==_ = eqTok }
 
 keywordTok : Token → String → TokenDFA Char (Maybe Token)
 keywordTok t k = just t <$ keywordToken (unpackString k)

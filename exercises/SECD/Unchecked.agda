@@ -91,7 +91,7 @@ run′ : SECD → Either String Value
 run′ s with step s
 ... | next s′ = run′ s′
 ... | done v  = right v
-... | error e = left e 
+... | error e = left e
 
 run : Term → Either String Value
 run t = run′ ([] ∣ [] ∣ term t ∷ [] ∣ [])
@@ -116,6 +116,5 @@ private
 
   showEnv e = showString "[" ∘ showEnv′ e ∘ showString "]"
 
-instance
-  ShowValue : Show Value
-  ShowValue = record { showsPrec = showValue }
+ShowValue : Show Value
+ShowValue = record { showsPrec = showValue }

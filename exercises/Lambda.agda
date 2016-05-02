@@ -18,6 +18,9 @@ open Unchecked  renaming (Term to Raw)
 open WellScoped renaming (Term to Expr)
 open WellTyped
 
+ShowRes : Show (Either String SECD.Unchecked.Value)
+ShowRes = ShowEither
+
 main : IO Unit
 main = getArgs >>=
        λ { [ file ] →
