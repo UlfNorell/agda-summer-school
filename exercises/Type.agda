@@ -15,9 +15,5 @@ arrow-inj-dom refl = refl
 arrow-inj-rng : ∀ {a b a₁ b₁} → a => a₁ ≡ b => b₁ → a₁ ≡ b₁
 arrow-inj-rng refl = refl
 
-unquoteDecl eqType = derivingEq (quote Type) eqType
-
 instance
-  EqType : Eq Type
-  EqType = record { _==_ = eqType }
-
+  unquoteDecl EqType = deriveEq EqType (quote Type)

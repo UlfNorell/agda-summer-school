@@ -30,9 +30,9 @@ pλ = token tλ
 p→ = token t→
 
 paren : ∀ {A} → P A → P A
-paren p = p[ *> p <* p]  
+paren p = p[ *> p <* p]
 
-{-# NO_TERMINATION_CHECK #-}
+{-# NON_TERMINATING #-}
 pType pType₁ : P Type
 
 pType  = pType₁ +++ _=>_ <$> pType₁ <* p→ <*> pType
@@ -48,7 +48,7 @@ mkLet f args a e₁ e₂ =
 mkVar : String → Term
 mkVar x = ifYes x == "suc" then suc else var x
 
-{-# NO_TERMINATION_CHECK #-}
+{-# NON_TERMINATING #-}
 pLam pApp pAtom : P Term
 pArg : P (Name × Type)
 
@@ -73,6 +73,7 @@ parseTerm s = parse! pLam (lex s)
 
 -- Examples --
 
+ex₁ ex₂ ex₃ ex₄ : String
 ex₁ = "λ (f : nat → nat) → f (f 4)"
 ex₂ = "λ (n : nat) → suc (suc n)"
 ex₃ = "(" & ex₂ & ") 5"

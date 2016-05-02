@@ -2,7 +2,7 @@
 module Grep where
 
 open import Prelude
-open import Data.Traversable using (mapM)
+open import Container.Traversable using (mapM)
 open import Text.Printf
 open import Lists
 

@@ -1,6 +1,6 @@
 
 open import Prelude
-open import Data.Traversable
+open import Container.Traversable
 
 open import Term
 open import Term.Parse
@@ -39,6 +39,7 @@ runUnchecked s =
     ; (just v) → SECD.Unchecked.run v
     }
 
+example : String
 example =
  "let twice    (f : nat → nat) (x : nat) : nat = f (f x)         in
   let times4   (f : nat → nat) : nat → nat = twice (twice f)     in

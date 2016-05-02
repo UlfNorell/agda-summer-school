@@ -86,12 +86,12 @@ step (lit _ ∷ _ ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply li
 step (suc ∷ suc ∷ _           ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to suc"
 step (suc ∷ closure _ _ _ ∷ _ ∣ _ ∣ apply ∷ _ ∣ _) = error "apply suc to closure"
 
-{-# NO_TERMINATION_CHECK #-}
+{-# NON_TERMINATING #-}
 run′ : SECD → Either String Value
 run′ s with step s
 ... | next s′ = run′ s′
 ... | done v  = right v
-... | error e = left e 
+... | error e = left e
 
 run : Term → Either String Value
 run t = run′ ([] ∣ [] ∣ term t ∷ [] ∣ [])
@@ -104,7 +104,7 @@ private
 
   showValue p (lit n)         = shows n
   showValue p suc             = showString "suc"
-  showValue p (closure x e v) = showParen (p > 0) $ showEnv e ∘ showString (" λ " & x & " → ") ∘ shows v
+  showValue p (closure x e v) = showParen (p >? 0) $ showEnv e ∘ showString (" λ " & x & " → ") ∘ shows v
 
   showBinding : Name × Value → ShowS
   showBinding (x , v) = showString x ∘ showString " = " ∘ showValue 0 v
