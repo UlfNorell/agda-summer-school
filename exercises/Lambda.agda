@@ -1,6 +1,8 @@
 
 open import Prelude
 open import Container.Traversable
+open import System.File
+open import System.FilePath
 
 open import Term
 open import Term.Parse
@@ -19,25 +21,22 @@ open WellScoped renaming (Term to Expr)
 open WellTyped
 
 main : IO Unit
-main = getArgs >>=
-       λ { [ file ] →
-             readFile file >>= λ s →
-             case parseTerm s of
-             λ { nothing  → putStrLn "Parse error!"
-               ; (just v) → putStrLn $ "Parsed: " & show v
-                                     & "\nValue: " & show (SECD.Unchecked.run v)
-               }
-         ; _ → getProgName >>= λ p → putStrLn ("Usage: " & p & " FILE")
-         }
+main = do
+  [ file ] ← getArgs
+    where _ → do p ← getProgName; putStrLn ("Usage: " & p & " FILE")
+  s ← readTextFile (absolute file)
+  case parseTerm s of λ where
+    nothing  → putStrLn "Parse error!"
+    (just v) → putStrLn $ "Parsed: " & show v
+                        & "\nValue: " & show (SECD.Unchecked.run v)
 
 -- For running from emacs.
 -- For instance: C-c C-n runUnchecked "(λ (n : nat) → suc n) 5"
 runUnchecked : String → Either String SECD.Unchecked.Value
 runUnchecked s =
-  case parseTerm s of
-  λ { nothing  → left "parse error"
-    ; (just v) → SECD.Unchecked.run v
-    }
+  case parseTerm s of λ where
+    nothing  → left "parse error"
+    (just v) → SECD.Unchecked.run v
 
 example : String
 example =
